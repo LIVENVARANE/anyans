@@ -114,6 +114,25 @@ function randomAnswer() {
       });
     }
   }
+  else if(window.location.href.includes('https://surveys.sample-cube.com/')) {
+    var radioCount = 0;
+    document.querySelectorAll('mat-radio-group').forEach(function() {
+      radioCount++;
+    });
+    var rdmRadio = radioCount - 2 - Math.floor(Math.random() * radioCount - 1);
+    if(rdmRadio == radioCount - 1) rdmRadio--;
+    if(rdmRadio == 0) rdmRadio++;
+    document.querySelectorAll('.mat-radio-label')[rdmRadio].click();
+
+    if(radioCount != 0) {
+      document.querySelectorAll('button').forEach(function(btn) {
+        if(btn.id.toLowerCase().includes('next')) {
+          btn.click();
+          outputToConsole('Submitting...');
+        }
+      })
+    }
+  }
   else if(window.location.href.includes('opinionbar.com')) {
     document.querySelectorAll('.answer_options').forEach(function(answer) {
       outputToConsole('Found one question');
@@ -403,6 +422,12 @@ else if(window.location.href.includes('https://survey-d.dynata.com/')) {
       }
     });
   }
+}
+else if(window.location.href.includes('https://project.tolunastart.com/')) {
+  outputToConsole('This website is not fully supported');
+}
+else if(window.location.href.includes('https://surveys.sample-cube.com/')) {
+  outputToConsole('This website is not fully supported');
 }
 else if(window.location.href.includes('https://dkr1.ssisurveys.com/')) {
   outputToConsole('This website is not fully supported');
