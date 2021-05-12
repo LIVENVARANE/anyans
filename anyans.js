@@ -115,14 +115,16 @@ function randomAnswer() {
     }
   }
   else if(window.location.href.includes('https://surveys.sample-cube.com/')) {
-    var radioCount = 0;
-    document.querySelectorAll('mat-radio-group').forEach(function() {
-      radioCount++;
+    document.querySelectorAll('.mat-radio-group').forEach(function(radioGroup) {
+      var radioCount = 0;
+      radioGroup.querySelectorAll('.mat-radio-label-content').forEach(function() {
+        radioCount++;
+      });
+      var rdmRadio = radioCount - 2 - Math.floor(Math.random() * radioCount - 1);
+      if(rdmRadio == radioCount - 1) rdmRadio--;
+      if(rdmRadio == 0) rdmRadio++;
+      radioGroup.querySelectorAll('.mat-radio-label')[rdmRadio].click();
     });
-    var rdmRadio = radioCount - 2 - Math.floor(Math.random() * radioCount - 1);
-    if(rdmRadio == radioCount - 1) rdmRadio--;
-    if(rdmRadio == 0) rdmRadio++;
-    document.querySelectorAll('.mat-radio-label')[rdmRadio].click();
 
     if(radioCount != 0) {
       document.querySelectorAll('button').forEach(function(btn) {
