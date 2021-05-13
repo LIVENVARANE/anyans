@@ -48,6 +48,8 @@ injectedReminder.style.display = 'none';
 injectedReminder.id = 'anyans-reminder';
 injectedReminder.innerHTML = 'Anyans is still injected';
 
+var disabledWebsites = ['steam', 'google'];
+
 var script = document.createElement('script');
 ////////////////////////////////
 script.innerHTML = `
@@ -115,10 +117,12 @@ function randomAnswer() {
     }
   }
   else if(window.location.href.includes('https://surveys.sample-cube.com/')) {
+    var canContinue = false;
     document.querySelectorAll('.mat-radio-group').forEach(function(radioGroup) {
       var radioCount = 0;
       radioGroup.querySelectorAll('.mat-radio-label-content').forEach(function() {
         radioCount++;
+        canContinue = true;
       });
       var rdmRadio = radioCount - 2 - Math.floor(Math.random() * radioCount - 1);
       if(rdmRadio == radioCount - 1) rdmRadio--;
@@ -126,7 +130,7 @@ function randomAnswer() {
       radioGroup.querySelectorAll('.mat-radio-label')[rdmRadio].click();
     });
 
-    if(radioCount != 0) {
+    if(canContinue) {
       document.querySelectorAll('button').forEach(function(btn) {
         if(btn.id.toLowerCase().includes('next')) {
           btn.click();
@@ -241,6 +245,26 @@ function randomAnswer() {
       }
     });
   }
+  else if(window.location.href.includes('https://survey-ca.dynata.com/')) {
+    var canContinue = false;
+    document.querySelectorAll('.answers-table').forEach(function(question) {
+      outputToConsole('Found one question');
+      question.querySelectorAll('tr').forEach(function(tr) {
+        var i = 0;
+        tr.querySelectorAll('.clickableCell').forEach(function(cb) {
+          if(Math.floor(Math.random() * 10) < 4 || i == 0) {
+            cb.click();
+            canContinue = true;
+            i++;
+          }
+        });
+      });
+    });
+    if(canContinue) {
+      document.getElementById('btn_continue').click();
+      outputToConsole('Submitting...');
+    }
+  }
   else if(window.location.href.includes('https://survey-d.dynata.com/')) {
     var canContinue = false;
     document.querySelectorAll('select').forEach(function(select) {
@@ -317,6 +341,14 @@ function easyAnswer() {
 
 document.getElementsByTagName('head')[0].appendChild(script);
 
+disabledWebsites.forEach(function(value) {
+  if(window.location.href.toLowerCase().includes(value)) {
+    document.getElementById('anyans-console').style.display = 'none';
+    document.getElementById('anyans-overlay').style.display = 'none';
+    injectedReminder.style.display = 'block';
+  }
+});
+
 if(window.location.href.includes('collectskins.com')) {
   document.getElementById('anyans-console').style.display = 'none';
   document.getElementById('anyans-overlay').style.display = 'none';
@@ -346,6 +378,13 @@ else if(window.location.href.includes('https://redirect.imadconnect.com/')) {
   outputToConsole('This website is not fully supported');
   if(document.getElementById('btnSartSurvey') !== null) {
     document.getElementById('btnSartSurvey').click();
+  }
+}
+else if(window.location.href.includes('https://mcresearch2.co1.qualtrics.com/')) {
+  outputToConsole('This website is not fully supported');
+  if(document.innerHTML.toLowerCase().includes(' Nous vous remercions de l\'intérêt que vous portez à cette étude confidentielle. Cette enquête devr')) {
+    outputToConsole('Skipping...');
+    document.getElementById('NextButton').click();
   }
 }
 else if(window.location.href.includes('https://survey.researchresults.com/')) {
@@ -389,6 +428,9 @@ else if(window.location.href.includes('https://mcg.decipherinc.com/')) {
   }
 }
 else if(window.location.href.includes('https://survey.cmix.com/')) {
+  outputToConsole('This website is fully supported');
+}
+else if(window.location.href.includes('https://survey-ca.dynata.com/')) {
   outputToConsole('This website is fully supported');
 }
 else if(window.location.href.includes('https://survey-d.dynata.com/')) {
