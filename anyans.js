@@ -10,7 +10,7 @@ overlay.style.width = '200px';
 overlay.style.zIndex = 9999;
 overlay.style.backgroundColor = '#ffffff5c';
 overlay.style.border = '1px solid gray';
-overlay.style.backdropFilter = 'blur(1px)';
+overlay.style.backdropFilter = 'blur(3px)';
 overlay.style.padding = '10px';
 overlay.style.textAlign = 'center';
 overlay.id = 'anyans-overlay';
@@ -25,7 +25,7 @@ console.style.height = '200px';
 console.style.zIndex = 9999;
 console.style.backgroundColor = '#ffffff5c';
 console.style.border = '1px solid gray';
-console.style.backdropFilter = 'blur(1px)';
+console.style.backdropFilter = 'blur(3px)';
 console.style.position = 'fixed';
 console.style.fontFamily = 'Consolas';
 console.style.bottom = '10%';
@@ -292,6 +292,17 @@ function randomAnswer() {
         }
       });
     });
+    document.querySelectorAll('.answers-table').forEach(function(question) {
+      outputToConsole('Found one question');
+      question.querySelectorAll('tr').forEach(function(tr) {
+        tr.querySelectorAll('.clickableCell').forEach(function(cb) {
+          if(Math.floor(Math.random() * 10) < 4) {
+            cb.click();
+            canContinue = true;
+          }
+        });
+      });
+    });
     if(canContinue) {
       outputToConsole('Answer(s) clicked, submitting...');
       document.getElementById('btn_continue').click();
@@ -299,12 +310,22 @@ function randomAnswer() {
   }
   else {
     outputToConsole(window.location.href + ' is not a supported website, trying to answer...');
-    document.querySelectorAll('.question').forEach(function(question) {
-      question.querySelectorAll('input').forEach(function(child) {
-        if(Math.floor(Math.random() * 10) < 4) {
-          child.click();
+    document.querySelectorAll('input').forEach(function(child) {
+      if(Math.floor(Math.random() * 10) < 4) {
+        child.click();
+      }
+    });
+    document.querySelectorAll('select').forEach(function(child) {
+      child.querySelectorAll('option').forEach(function(option) {
+        if(option.innerHTML != '') {
+          child.querySelectorAll('option').forEach(function(option) {
+            option.selected = false;
+          });
+          if(Math.floor(Math.random() * 10) < 4) {
+            option.selected = 'selected';
+          }
         }
-      })
+      });
     });
     outputToConsole('Tried to click answer(s)');
   }
@@ -385,6 +406,13 @@ else if(window.location.href.includes('https://mcresearch2.co1.qualtrics.com/'))
   if(document.innerHTML.toLowerCase().includes(' Nous vous remercions de l\'intérêt que vous portez à cette étude confidentielle. Cette enquête devr')) {
     outputToConsole('Skipping...');
     document.getElementById('NextButton').click();
+  }
+}
+else if(window.location.href.includes('https://app.samplecounts.com/')) {
+  outputToConsole('This website is not fully supported');
+  if(document.getElementById('btnSartSurvey') !== null) {
+    outputToConsole('Skipping...');
+    document.getElementById('btnSartSurvey').click();
   }
 }
 else if(window.location.href.includes('https://survey.researchresults.com/')) {
@@ -479,21 +507,6 @@ else if(window.location.href.includes('https://dkr1.ssisurveys.com/')) {
     document.getElementById('takesurveybtn').click();
     outputToConsole('Skipping...');
   }
-  if(document.getElementById('header').innerHTML == '\nAimeriez-vous faire entendre votre opinion?') {
-    if(document.getElementById('identityConfirmation') !== null) {
-      if(document.getElementById('identityConfirmation').querySelector('.questionFont').innerHTML.includes('Date de naissance:')) {
-        document.getElementById('birthDay').querySelectorAll('option')[3].selected = 'selected';
-        document.getElementById('birthMonth').querySelectorAll('option')[3].selected = 'selected';
-        document.getElementById('birthYear').querySelectorAll('option').forEach(function(answer) {
-          if(answer.innerHTML == '1990') {
-            answer.selected = 'selected';
-          }
-        });
-        document.getElementById('next').click();
-        outputToConsole('Skipping...');
-      }
-    }
-  }
 }
 else if(window.location.href.includes('https://s.cint.com/') || window.location.href.includes('https://www.ptrack1.com/')) {
   outputToConsole('This website is known');
@@ -506,6 +519,12 @@ else if(window.location.href.includes('https://s.cint.com/') || window.location.
       }
     });
   }
+}
+else if(window.location.href.includes('http://peanutlabs.com/')) {
+  outputToConsole('This website is known');
+}
+else if(document.title == 'Sorry... | RevenueWall') {
+  window.close();
 }
 else if(window.location.href.includes('https://edgesurvey.innovatemr.net/')) {
   outputToConsole('This website is not fully supported');
